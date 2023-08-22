@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lcw-dotnet-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lcw-dotnet
+  template:
+    metadata:
+      labels:
+        app: lcw-dotnet
+    spec:
+      containers:
+      - name: lcw
+        image: docmehmet/lcw:latest
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
